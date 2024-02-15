@@ -90,13 +90,30 @@ done
 echo "$latest_version" >"$working_root/.version"
 
 cd "$working_root"
-tar -zcvf .tmp/netcoredbg-osx-arm64.tar.gz netcoredbg
 
-# Creating a GitHub release with files
-gh release create "$latest_version" \
-  --title "$latest_version" \
-  --notes "Release of version $latest_version" \
-  .tmp/netcoredbg-osx-arm64.tar.gz
+echo "Successfully updated netcoredbg"
+
+permission_level=$(gh repo view --json viewerPermission --jq '.viewerPermission')
+
+if [[ $permission_level == "ADMIN" || $permission_level == "WRITE" ]]; then
+  # User has admin or write access, ask for confirmation to create a release
+  echo "You have permission to create a release."
+  echo -n "Do you want to create a release? (y/n): "
+  read -r user_input
+
+  if [[ $user_input =~ ^[Yy]$ ]]; then
+    tar -zcvf .tmp/netcoredbg-osx-arm64.tar.gz netcoredbg
+    # User confirmed, run the release create command
+    gh release create "$latest_version" \
+      --title "$latest_version" \
+      --notes "Release of version $latest_version" \
+      .tmp/netcoredbg-osx-arm64.tar.gz
+
+    rm -rf .tmp/netcoredbg-osx-arm64.tar.gz
+  else
+    echo "Release creation cancelled."
+  fi
+fi
 
 cd "$repo_dir"
 rm -rf build src/debug/netcoredbg/bin bin
