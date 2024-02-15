@@ -98,7 +98,7 @@ permission_level=$(gh repo view --json viewerPermission --jq '.viewerPermission'
 if [[ $permission_level == "ADMIN" || $permission_level == "WRITE" ]]; then
   # User has admin or write access, ask for confirmation to create a release
   echo "You have permission to create a release."
-  echo -n "Do you want to create a release? (y/n): "
+  echo "Do you want to create a release? (y/n): "
   read -r user_input
 
   if [[ $user_input =~ ^[Yy]$ ]]; then
