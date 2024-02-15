@@ -1,3 +1,9 @@
+# macOS specific files
+.DS_Store
+
+# Ignore the tmp folder (created during the update function)
+.tmp/
+
 # Compiled Lua sources
 luac.out
 
