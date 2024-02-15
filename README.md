@@ -1,4 +1,4 @@
-# Neovim plugion to implement netcoredbg on arm64 macOS
+# Neovim plugin to implement netcoredbg on arm64 macOS
 
 Since the official netcoredbg repo has no native macOS arm64 build, I built it myself and created this simple plugin to integrate it with nvim-dap.
 
