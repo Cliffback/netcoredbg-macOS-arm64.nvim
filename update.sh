@@ -9,8 +9,8 @@ if [ "$dirname" != "nvim-dap-netcoredbg-macOS-arm64" ]; then
   exit 1
 fi
 
-if [ -f "$working_root/bin/.version" ]; then
-  installed_version=$(cat "$working_root"/bin/.version)
+if [ -f "$working_root/.version" ]; then
+  installed_version=$(cat "$working_root"/.version)
 else
   installed_version="0"
 fi
@@ -28,7 +28,7 @@ fi
 # Prompt for user confirmation
 echo "A new version of netcoredbg is available."
 echo "current: $installed_version, latest: $latest_version"
-echo -n "Do you want to update? (y/n): "
+echo "Do you want to update? (y/n): "
 
 read -r user_input
 if [[ ! $user_input =~ ^[Yy]$ ]]; then
@@ -63,7 +63,6 @@ if [ -d "$repo_dir/build" ]; then
   rm -rf "$repo_dir/build"
 fi
 
-
 mkdir build
 cd build
 
@@ -72,7 +71,7 @@ CC=clang CXX=clang++ cmake ..
 make
 
 src_folder="src"
-dest_folder="$working_root/bin"
+dest_folder="$working_root/netcoredbg"
 files=(
   "libdbgshim.dylib"
   "ManagedPart.dll"
@@ -88,6 +87,18 @@ for file in "${files[@]}"; do
   cp -f "$src_folder/$file" "$dest_folder/"
 done
 
-echo "$latest_version" >"$working_root/bin/.version"
+echo "$latest_version" >"$working_root/.version"
 
-rm -rf "$repo_dir"
+cd "$working_root"
+tar -zcvf .tmp/netcoredbg-osx-arm64.tar.gz netcoredbg
+
+# Creating a GitHub release with files
+gh release create "$latest_version" \
+  --title "$latest_version" \
+  --notes "Release of version $latest_version" \
+  .tmp/netcoredbg-osx-arm64.tar.gz
+
+cd "$repo_dir"
+rm -rf build src/debug/netcoredbg/bin bin
+
+cd "$working_root"

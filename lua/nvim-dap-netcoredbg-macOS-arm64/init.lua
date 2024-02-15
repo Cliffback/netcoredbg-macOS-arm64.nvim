@@ -9,7 +9,7 @@ local function get_plugin_directory()
 end
 
 local plugin_directory = get_plugin_directory()
-local netcoredbg_path = plugin_directory .. 'bin/netcoredbg'
+local netcoredbg_path = plugin_directory .. 'netcoredbg/netcoredbg'
 
 
 M.setup = function(dap)
