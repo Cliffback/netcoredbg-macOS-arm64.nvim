@@ -11,5 +11,5 @@ Lazy
 
 ### Setup
 ```lua
-    require('netcoredbg-macOS-arm64').setup(require('dap'))
+    require('nvim-dap-netcoredbg-macOS-arm64').setup(require('dap'))
 ```
