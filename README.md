@@ -2,7 +2,7 @@
 
 ### Install
 Lazy
-```json
+```lua
   {
     "Cliffback/nvim-dap-netcoredbg-macOS-arm64",
     dependencies = { "mfussenegger/nvim-dap" }
