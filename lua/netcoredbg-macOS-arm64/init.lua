@@ -4,8 +4,8 @@ local M = {}
 
 local function get_plugin_directory()
   local str = debug.getinfo(1, "S").source:sub(2)
-  str = str:match("(.*/)")                 -- Get the directory of the current file
-  return str:gsub("/[^/]+/[^/]+/$", "/")   -- Go up two directories
+  str = str:match("(.*/)")               -- Get the directory of the current file
+  return str:gsub("/[^/]+/[^/]+/$", "/") -- Go up two directories
 end
 
 local plugin_directory = get_plugin_directory()
@@ -67,6 +67,14 @@ M.setup = function(dap)
       program = function()
         return vim.fn.input('Path to dll', get_dll_path(), 'file')
       end,
+      env = {
+        ASPNETCORE_ENVIRONMENT = function()
+          return vim.fn.input("ASPNETCORE_ENVIRONMENT: ", "Development")
+        end,
+        ASPNETCORE_URL = function()
+          return vim.fn.input("ASPNETCORE_URL: ", "http://localhost:5000")
+        end,
+      }
     },
   }
 end
