@@ -4,7 +4,7 @@ repo_dir="$working_root/.tmp/netcoredbg" # Concatenate to form the full path
 
 dirname=$(basename "$working_root")
 
-if [ "$dirname" != "nvim-dap-netcoredbg-macOS-arm64" ]; then
+if [ "$dirname" != "netcoredbg-macOS-arm64.nvim" ]; then
   echo "Current directory is not the correct repo folder."
   exit 1
 fi
