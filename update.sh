@@ -9,6 +9,12 @@ if [ "$dirname" != "netcoredbg-macOS-arm64.nvim" ]; then
   exit 1
 fi
 
+# Check if the git tree is dirty
+if [[ -n $(git status --porcelain) ]]; then
+  echo "Cannot create a release: the git tree is dirty."
+  exit 1
+fi
+
 if [ -f "$working_root/.version" ]; then
   installed_version=$(cat "$working_root"/.version)
 else
@@ -96,12 +102,21 @@ echo "Successfully updated netcoredbg"
 permission_level=$(gh repo view --json viewerPermission --jq '.viewerPermission')
 
 if [[ $permission_level == "ADMIN" || $permission_level == "WRITE" ]]; then
+
   # User has admin or write access, ask for confirmation to create a release
   echo "You have permission to create a release."
   echo "Do you want to create a release? (y/n): "
   read -r user_input
 
   if [[ $user_input =~ ^[Yy]$ ]]; then
+    # Stage and commit changes
+    git add -A
+    git commit -m "Update to version $latest_version"
+    git push || {
+      echo "Error pushing changes to the repository"
+      exit 1
+    }
+
     tar -zcvf .tmp/netcoredbg-osx-arm64.tar.gz netcoredbg
     # User confirmed, run the release create command
     gh release create "$latest_version" \
