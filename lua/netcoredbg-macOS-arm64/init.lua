@@ -12,7 +12,7 @@ local plugin_directory = get_plugin_directory()
 local netcoredbg_path = plugin_directory .. 'netcoredbg/netcoredbg'
 
 
-M.setup = function(dap)
+M.setup = function(dap, env_vars)
   dap.adapters.coreclr = {
     type = 'executable',
     command = netcoredbg_path,
@@ -67,14 +67,14 @@ M.setup = function(dap)
       program = function()
         return vim.fn.input('Path to dll', get_dll_path(), 'file')
       end,
-      env = {
+      env = vim.tbl_extend("force", {
         ASPNETCORE_ENVIRONMENT = function()
           return vim.fn.input("ASPNETCORE_ENVIRONMENT: ", "Development")
         end,
         ASPNETCORE_URL = function()
           return vim.fn.input("ASPNETCORE_URL: ", "http://localhost:5000")
         end,
-      }
+      }, env_vars or {})
     },
   }
 end
