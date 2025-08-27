@@ -66,7 +66,8 @@ local function get_dll_path()
   end
 end
 
-M.setup = function(dap)
+M.setup = function()
+  local dap = require("dap")
   -- 1. Load .env if exists
   local env_vars = {}
   local env_path = vim.fn.getcwd() .. "/.env"
