@@ -19,6 +19,12 @@ M.setup = function(dap, env_vars)
     args = { '--interpreter=vscode' }
   }
 
+  dap.adapters.netcoredbg = {
+    type = 'executable',
+    command = dap.adapters.coreclr.command,
+    args = { '--interpreter=vscode' },
+  }
+
   local function getCurrentFileDirName()
     local fullPath = vim.fn.expand('%:p:h')      -- Get the full path of the directory containing the current file
     local dirName = fullPath:match("([^/\\]+)$") -- Extract the directory name
