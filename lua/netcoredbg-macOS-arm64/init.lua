@@ -95,6 +95,12 @@ M.setup = function()
     command = netcoredbg_path,
     args = { '--interpreter=vscode' }
   }
+  
+  dap.adapters.netcoredbg = {
+	type = "executable",
+	command = netcoredbg_path,
+	args = { "--interpreter=vscode" },
+  }
 
   -- 4. Register C# configuration
   dap.configurations.cs = {
